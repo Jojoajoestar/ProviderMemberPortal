@@ -1,0 +1,29 @@
+# Build Folders
+bin/
+obj/
+
+# User-Specific Files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Runtime Folders
+wwwroot/
+logs/
+*.log
+
+# Environment Variables
+.env
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# Node Modules (if using npm or yarn)
+node_modules/
+
+# ASP.NET Core Files
+Properties/launchSettings.json
