@@ -5,6 +5,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using Api.Data;
+using Microsoft.EntityFrameworkCore;
 
 // ==============================
 //  APPLICATION CONFIGURATION
@@ -18,6 +21,11 @@ var builder = WebApplication.CreateBuilder(args);
 // ==============================
 // Add services to the container. These services are injected as dependencies throughout the app.
 
+// Register the DbContext for Entity Framework Core
+// ClaimStatusDbContext is configured with a connection string from appsettings.json
+builder.Services.AddDbContext<ClaimStatusDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Enable Endpoint API Explorer for Swagger documentation
 builder.Services.AddEndpointsApiExplorer();
 
@@ -26,12 +34,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     // Configure Swagger options
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Provider Member Portal API",
         Version = "v1",
         Description = "API Documentation for Provider Member Portal",
-        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        Contact = new OpenApiContact
         {
             Name = "Support Team",
             Email = "support@example.com"
@@ -43,14 +51,12 @@ builder.Services.AddSwaggerGen(options =>
 // This is required for attribute-based routing using [HttpGet], [HttpPost], etc.
 builder.Services.AddControllers();
 
-
 // ==============================
 //      BUILD THE APPLICATION
 // ==============================
 // The builder is now ready to build the application
 // The app object represents the web application itself
 var app = builder.Build();
-
 
 // ==============================
 //   MIDDLEWARE CONFIGURATION
@@ -83,7 +89,6 @@ app.UseRouting();
 // Register route handlers for API controllers
 // Ensures all endpoints with attribute routing are mapped correctly
 app.MapControllers();
-
 
 // ==============================
 //      SIMPLE API ENDPOINT
@@ -119,14 +124,12 @@ app.MapGet("/weatherforecast", () =>
 // Include this endpoint in the generated Swagger documentation
 .WithOpenApi();
 
-
 // ==============================
 //          RUN THE APP
 // ==============================
 // Start the web application and listen for incoming HTTP requests
 // The app will listen on ports specified in launchSettings.json
 app.Run();
-
 
 // ==============================
 //      RECORD DEFINITION
