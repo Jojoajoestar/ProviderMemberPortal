@@ -26,6 +26,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ClaimStatusDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", builder =>
+    {
+        builder
+            .AllowAnyOrigin()     // Allow requests from any origin
+            .AllowAnyMethod()     // Allow any HTTP method (GET, POST, etc.)
+            .AllowAnyHeader();    // Allow any HTTP headers
+    });
+});
+
 // Enable Endpoint API Explorer for Swagger documentation
 builder.Services.AddEndpointsApiExplorer();
 
@@ -34,12 +45,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     // Configure Swagger options
-    options.SwaggerDoc("v1", new OpenApiInfo
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
         Title = "Provider Member Portal API",
         Version = "v1",
         Description = "API Documentation for Provider Member Portal",
-        Contact = new OpenApiContact
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
         {
             Name = "Support Team",
             Email = "support@example.com"
@@ -81,6 +92,10 @@ if (app.Environment.IsDevelopment())
 
 // Redirect HTTP requests to HTTPS
 app.UseHttpsRedirection();
+
+// Enable CORS for all requests
+
+app.UseCors("AllowAllOrigins");
 
 // Enable routing for controllers
 // This scans and registers all controllers with attribute routing
