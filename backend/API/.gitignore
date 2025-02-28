@@ -1,0 +1,25 @@
+# Ignore build outputs
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio specific files
+.vscode/
+.vs/
+
+# OS-specific files
+Thumbs.db
+.DS_Store
+
+# Sensitive configuration
+appsettings.Development.json
+secrets.json
+.env
+
+# Dependencies
+node_modules/

@@ -24,13 +24,13 @@ namespace Api.Models
         public int Id { get; set; }
 
         // Unique claim number
-        [Required]
-        [MaxLength(50)]
+        [Required (ErrorMessage = "Claim Number is required.") ]
+        [MaxLength(50, ErrorMessage = "Claim Number cannot exceed 50 characters.")]
         public string ClaimNumber { get; set; } = string.Empty;
 
         // Status of the claim (e.g., Pending, Approved, Rejected)
-        [Required]
-        [MaxLength(50)]
+        [Required (ErrorMessage = "Status is required.")]
+        [MaxLength(50, ErrorMessage = "Status cannot exceed 50 characters.")]
         public string Status { get; set; } = string.Empty;
 
         // Date when the status was last updated
@@ -38,7 +38,7 @@ namespace Api.Models
         public DateTime DateUpdated { get; set; } = DateTime.UtcNow;
 
         // Optional description of the claim status
-        [MaxLength(250)]
+        [MaxLength(250, ErrorMessage = "Description cannot exceed 250 characters.")]
         public string? Description { get; set; }
     }
 }

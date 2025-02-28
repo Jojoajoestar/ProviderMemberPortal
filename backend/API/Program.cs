@@ -20,7 +20,6 @@ var builder = WebApplication.CreateBuilder(args);
 //      SERVICES CONFIGURATION
 // ==============================
 // Add services to the container. These services are injected as dependencies throughout the app.
-
 // Register the DbContext for Entity Framework Core
 // ClaimStatusDbContext is configured with a connection string from appsettings.json
 builder.Services.AddDbContext<ClaimStatusDbContext>(options =>
@@ -56,6 +55,12 @@ builder.Services.AddSwaggerGen(options =>
             Email = "support@example.com"
         }
     });
+
+    // Include XML comments for Swagger documentation
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+
 });
 
 // Register Controllers for API routing
@@ -68,6 +73,9 @@ builder.Services.AddControllers();
 // The builder is now ready to build the application
 // The app object represents the web application itself
 var app = builder.Build();
+
+// Enable CORS for all requests
+app.UseCors("AllowAllOrigins");
 
 // ==============================
 //   MIDDLEWARE CONFIGURATION
@@ -93,13 +101,11 @@ if (app.Environment.IsDevelopment())
 // Redirect HTTP requests to HTTPS
 app.UseHttpsRedirection();
 
-// Enable CORS for all requests
-
-app.UseCors("AllowAllOrigins");
-
 // Enable routing for controllers
 // This scans and registers all controllers with attribute routing
 app.UseRouting();
+
+app.UseAuthorization();
 
 // Register route handlers for API controllers
 // Ensures all endpoints with attribute routing are mapped correctly
